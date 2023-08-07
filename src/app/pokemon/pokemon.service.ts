@@ -22,10 +22,23 @@ export class PokemonService {
     );
   }
 
-  addPokemon(pokemon: Pokemon): Observable<null> {
-    return this.http.post("api/pokemons", pokemon, this.httpOptions()).pipe(
+  addPokemon(pokemon: Pokemon): Observable<Pokemon> {
+    return this.http
+      .post<Pokemon>("api/pokemons", pokemon, this.httpOptions())
+      .pipe(
+        tap((pokemon) => this.log(pokemon)),
+        catchError((err) => this.handleError(err, null))
+      );
+  }
+
+  searchPokemonList(term: string): Observable<Pokemon[]> {
+    if (term.length <= 1) {
+      return of([]);
+    }
+
+    return this.http.get<Pokemon[]>(`api/pokemons/?name=${term}`).pipe(
       tap((pokemon) => this.log(pokemon)),
-      catchError((err) => this.handleError(err, null))
+      catchError((err) => this.handleError(err, []))
     );
   }
 
@@ -36,7 +49,7 @@ export class PokemonService {
     );
   }
 
-  deletePokemon(pokemonId: number): Observable<null>  {
+  deletePokemon(pokemonId: number): Observable<null> {
     return this.http.delete(`api/pokemons/${pokemonId}`).pipe(
       tap((pokemon) => this.log(pokemon)),
       catchError((err) => this.handleError(err, null))
