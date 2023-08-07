@@ -3,10 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Pokemon } from '../pokemon';
 import { PokemonService } from '../pokemon.service';
+import { PokemonFormComponent } from '../pokemon-form/pokemon-form.component';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-pokemon',
-  templateUrl: './edit-pokemon.component.html',
+    selector: 'app-edit-pokemon',
+    templateUrl: './edit-pokemon.component.html',
+    standalone: true,
+    imports: [NgIf, PokemonFormComponent],
 })
 export class EditPokemonComponent implements OnInit {
   pokemon: Pokemon | undefined;
